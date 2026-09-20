@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+	<meta charset="UTF-8">
+	<title>BookShelf - Add Book</title>
+</head>
+
+<body>
+
+	<form th:action="@{/books/add}" th:object="${book}" method="post">
+
+	    <div th:if="${#fields.hasAnyErrors()}">
+	        <p th:each="error : ${#fields.allErrors()}"
+	           th:text="${error}"
+	           style="color:red;">
+	        </p>
+	    </div>
+
+	<h1> Add a New Book</h1>
+	<a th:href="@{/books}">Cancel</a>
+
+	<!-- 
+			th:action - the URL where the form POSTs
+			th:object - binds the form to the "book" object in the Model
+			method=post - HTTP POST
+		-->
+	<form th:action="@{/books/add}" th:object="${book}" method="post">
+
+		<!-- Title field with validation error -->
+		<div>
+			<label for="title">Title:</label>
+			<!--
+				th:field="*{title}" is shorthand for:
+				id="title" name="title" th:value="${book.title}"
+				The *() syntax uses the th:object as the root. 
+			-->
+			<input type="text" th:field="*{title}" required>
+			<!-- th:errors renders the constraint message with validation fails -->
+			<!-- th: if hides the span entirely, when there are no errors -->
+			<span th:if="${#fields.hasErrors('title')}" th:errors="*{title}"
+				style="color:red; font-size:0.85em;"></span>
+		</div>
+
+		<!-- Author field with validation error -->
+		<div>
+			<label for="author">Author:</label>
+			<input type="text" th:field="*{author}" required>
+			<span th:if="${#fields.hasErrors('author')}" th:errors="*{author}"
+				style="color:red; font-size:0.85em;"></span>
+		</div>
+
+		<!-- Year field with validation error -->
+		<div>
+			<label for="year">Year:</label>
+			<input type="text" th:field="*{year}" min="1000" max="2099" required>
+			<span th:if="${#fields.hasErrors('year')}" th:errors="*{year}" style="color:red; font-size:0.85em;"></span>
+		</div>
+
+		<div>
+			<label for="genre">Genre:</label>
+			<select th:field="*{genre}">
+				<option value="">-- Choose genre --</option>
+				<option value="Fiction">Fiction</option>
+				<option value="Non-Fiction">Non-Fiction</option>
+				<option value="Technology">Technology</option>
+				<option value="Science">Science</option>
+				<option value="History">History</option>
+			</select>
+		</div>
+
+		<br>
+		<button type="submit">Save Book</button>
+
+	</form>
+</body>
+
+</html>

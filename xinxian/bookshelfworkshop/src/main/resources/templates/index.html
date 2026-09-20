@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"> <!--Required namespace-->
+
+<head>
+	<meta charset="UTF-8">
+	<title>BookShelf - Home</title>
+</head>
+
+<body>
+
+	<h1>Welcome to BookShelf</h1>
+	<p>Your personal library, online.</p>
+
+	<h2>Recently Viewed</h2>
+	<!-- TODO: Retrieve the recently viewed list from the session using th:with-->
+	<!-- Hint: th:with="recent=${session.recentlyViewed}" -->
+	<div th:with="recent=${session.recentlyViewed}">
+		<p th:if="${recent == null or #lists.isEmpty(recent)}">
+			No books viewed yet.
+		</p>
+		<ul th:unless="${recent == null or #lists.isEmpty(recent)}">
+			<!-- TODO: Loop over recent IDs and create a link to each book's detail page. -->
+			<li th:each="bookId : ${recent}">
+				<a th:href="@{/books/{id}(id=${bookId})}" th:text="|Book # ${bookId}|">Book</a>
+			</li>
+		</ul>
+	</div>
+	<div>
+		<!-- POST is required; a plain link would be a GET request -->
+		<form th:action="@{/session/clear}" method="post">
+		<button type="submit">Clear My Session</button>
+		</form>
+	</div>
+	<nav>
+		<ul>
+			<!-- th:href is how Thymeleaf generates URLs-->
+			<li><a th:href="@{/books}">Browse all Books</a></li>
+			<li><a th:href="@{/books/add}">Add a New Book</a></li>
+		</ul>
+
+	</nav>
+</body>
+
+</html>
